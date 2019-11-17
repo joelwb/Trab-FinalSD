@@ -60,6 +60,9 @@ Arquivo|Path|Descrição
 **handler_slaves.py**|src/handler_slaves.py|É um módulo responsável por realizar inicializar os slaves baseado nas propriedades passado como argumento via terminal no momento de ser buildade, no caso seu ID e nome respectivamente. No momento que o slave é criado é mostrado suas principais informações, assim como o horário de sua instância e quando ele foi requisitado pelo seu mestre.
 
 #### Modelagem estrutural (Diagrama de Classes)
+<figure>
+    <img src="https://github.com/joelwb/Trab-FinalSD/blob/master/images/class_diagram.png?raw=true" alt="class diagram" title="Diagrama de Classes App" />
+</figure>
 
 #### Modelagem comportamental (Diagrama de Sequências)
 
