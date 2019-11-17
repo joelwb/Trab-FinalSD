@@ -5,7 +5,7 @@ __pycache__/
 .vscode/
 /venv/*
 */env/*
-/test/*
+src/test
 .idea
 .sonarlint
 *.editorconfig
