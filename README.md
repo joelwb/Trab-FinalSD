@@ -90,7 +90,7 @@ Para executar a aplicação o app no ambiente Linux basta seguir os seguintes pa
 
 6. Para buildar/executar o app no ambiente Linux, onde a linguagem é Python, que geralmente já vem instalado nativamente, basta abrir o CLI (Command Line Interface) no diretório __/src__ da aplicação e executar o seguinte comando para inicializar o server:
 
-        $ python3 handler_server.py
+        $ python3 handler_master.py
         
 7. Para cada slave que se deseja criar é nessário abrir um novo terminal, sendo necessário passar como argumento o ID e o nome do slave respectivamente, como é mostrado abaixo. Lembrando que o nome do slave é opcional.
 
