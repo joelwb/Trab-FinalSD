@@ -21,7 +21,7 @@ class Master(threading.Thread):
         '''Request the current slave status.'''
 
         if slave_id not in Master.slaves_ids:
-            raise Exception("Não existe um slave registrado com esse id!")
+            return None
 
         producer = KafkaProducer(bootstrap_servers=["localhost:9092"], value_serializer=str.encode)
         producer.send(f"get_status_{slave_id}", "")
