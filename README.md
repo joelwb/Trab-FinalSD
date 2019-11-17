@@ -8,42 +8,46 @@ O trabalho da disciplina de *SD (Sistemas Distribuídos)*, do curso de graduaç�
 - **Ferramentas de suporte**: kafka-python (versão 1.4.7)
 - **Ambiente de desenvolvimento**: Visual Studio Code (versão 1.35.1+)
 
-DynAgentX bla bla bla... Kafka bla bla bla
+o *DynagentX* é uma adaptação padrão do [AgentX](http://www.networksorcery.com/enp/protocol/agentx.htm) com intuito de atender aos requisitos de uma [SD-WAN](https://www.cisco.com/c/pt_br/solutions/enterprise-networks/sd-wan/what-is-sd-wan.html). É um framework adaptável e flexível, onde seus principais componentes são:
+- A plataforma principal *DynagentX*;
+- OSGiSnmpMasterAgentX (função de mestre);
+- OSGiSnmpSubAgentX (consome serviços do mestre);
+- DynagentX remoto.
+
+O trabalho consiste na implementação de um simples sistema *DynagentX* com a utilização e apoio da tecnologia [*Apache Kafka*](https://kafka.apache.org/) implementada na linguagem de programação *Python*. 
 
 ### Apache Kafka
-*Apache Kafka* é uma biblioteca do python capaz realizar:
-- x
-- y
-- z
-- w
+[*Apache Kafka*](https://kafka.apache.org/intro) é uma plataforma distribuída, logo um sistema distribuído, de mensagens e streaming. Basicamente seu funcionamento é:
+1. O chamado *producer* é responsável por produzir o recurso chamado *message*;
+2. A *mensagem* é armazenada/anexada em uma estrutura chamada *topic*, o qual este agrupa as mensagens;
+3. O chamado *consumer* é reponsável por consumir as mensagens produzidas presentes nos *topics*.
 
-Além dessas features existem muitas outras, porém o importante a ressaltar é que o intuito é poupar tempo e ser mais fácil na construção de parsers. Os principais links sobre ela estão logo abaixo:
-- [Documentação]()
-- [Github]()
+Logo caso necessite mover e transformar um considerável volume de dados em tempo real entre diferentes sistemas, o *Apache Kafka* pode atender essa demanda.
+
+<figure>
+    <img src="" alt="Funcionamento do kafka" title="Workflow básico de funcionamento do Kafka" />
+    <figcaption>Workflow básico de funcionamento do Apache Kafka.</figcaption>
+</figure>
+
+Os principais links sobre a tecnologia estão logo abaixo:
+- [Documentação](https://kafka.apache.org/documentation/)
+- [Post sobre](https://medium.com/@gabrielqueiroz/o-que-%C3%A9-esse-tal-de-apache-kafka-a8f447cac028)
 
 ### Descrição geral
 A estrutura da aplicação está definida da seguinte maneira:
 
 ```
-TPA-trab2-ordenacao
+Trab-FinalSD
     |_ README.md
-    |_ relatório.pdf
-    |_ codes-references.txt
+    |_ images
+    |_ diagrams
     |_ src
-        |_ analisys_person.py
-        |_ build.py
-        |_ handler_person.py
-        |_ sort_collection.py
-        |_ files
-            |_ input
-                |_ *arquivos entrada*.csv
-            |_ output
-                |_ *arquivos saída*.csv
-            |_ analyze
-                |_ *arquivos saída dos testes da análise*.csv
+        |_ handler_master.py
+        |_ handler_slaves.py
+        |_ simple_main.py
         |_ models
-            |_ ExecutionType.py
-            |_ Person.py
+            |_ Master.py
+            |_ Slave.py
 ```
 
 #### Descrição geral dos arquivos
@@ -51,15 +55,10 @@ Descrição geral dos principais arquivos contidos nesta aplicação:
 
 Arquivo|Path|Descrição
 ---|---|---
-**ExecutionType.py**|src/models/ExecutionType.py|É uma classe do tipo Enum utilizada no módulo de build.py da aplicação principal. Basicamente contém três tipos de valores que correspondem ao tipo de execução selecionada no módulo principal, os quais são: *MAIN, MAIN_WITHOUT_ARGS* e *RUN_ANALYSIS*.
-**Person.py**|src/models/Person.py|Classe responsável por representar a entidade Pessoa (Person em inglês). Nesta classe além de conter os atributos voltado ao escopo do trabalho. Também contém o método de comparação entre objetos desta classe chamado *compareTo()*. Basicamente ele compara se o objeto caller, que chama o método, é menor que o objeto passado como argumento, realizando esta comparação pela chave *uid*.
-**build.py**|src/build.py|É o módulo que é buildado e que contém a execução principal do programa. Além da execução principal, *main()*, também há outras formas de execução, onde um deles é voltado para testes internos do desenvolvedor sem utilização de comandos no terminal como é realizado na *main()*, o qual é chamado de *main_without_args()*. Já o outro é voltado para análise de um conjunto de dados de entrada chamado de *run_analysis()*. Ele que é responsável por realizar a chamada do script do módulo *analisys_person.py*.
-**handler_person.py**|src/handler_person.py|É um módulo responsável por realizar a manipulação dos dados acerca dos objetos da classe Person. Logo todas as operações que envolvem leitura/escrita de arquivos, transformações dos dados unitários em objetos da classe Person, definições de configurações de execuções através da linha de comando, cálculos, impressões e afins. Ou seja, toda parte de lógica "hard code" está presente neste módulo, onde o *build.py* faz chamada de suas funções.
-**sort_collection.py**|src/sort_collection.py|É a biblioteca/módulo responsável por realizar a ordenação de coleções/vetores, ou como é chamado em python listas. Nele está presente sete algoritmos diferentes de ordenação que pode ser escolhido para se ordenar uma coleção/lista qualquer, dado que estes elementos da coleção devem implementar o método *compareTo*, como é o caso da classe Person. Os algoritmos de ordenação presentes são: selection sort, insertion sort, quicksort, mergesort, heapsort, introsort e timsort.
-**analisys_person.py**|src/analisys_person.py|Arquivo que contém toda lógica do script de análise realizada acerca da performance de todos os sete algoritmos implementados. Ele que é responsável por fazer todo o processamento dos dados de entrada através da função *analyze*, onde é passado como argumento um caminho do diretório e gerado arquivos .csv de saída que são armazenados dentro do diretório */analyze*, os quais possuem os resultados obtidos do processamento prontos para serem analizados.
-**arquivos entrada.csv**|src/files/input/arquivos entrada.csv|São os arquivos do tipo CSV que alimenta a entrada de dados da aplicação. Sempre que for realizada a execução da aplicação é passado o arquivo de entrada que deve estar presente no diretório /files/input.
-**arquivos saida.csv**|src/files/output/arquivos saida.csv|São os arquivos de saída do tipo CSV representando o resultado do processamento ordenação realizado dos arquivos de entrada alimentados. Sempre que for realizada a execução da aplicação também é passado o nome do arquivo de saída que será criado no diretório /files/output. 
-**arquivos saida analise.csv**|src/files/analyze/arquivos saida analise.csv|São também arquivos de saída do tipo CSV, porém diferente dos presentes no /output, eles são resultados de análises feitas no módulo *analisys_person.py*. São gerados três tipos de arquivos principais: primeiro são gerados vários arquivos, onde cada arquivo contém as 10 execuções com seu tempo de execução para todas as quantidades de registros(10 à 7500000). Segundo são gerados sete arquivos, onde cada um contém um nome de um algoritmo de ordenação implementado. Neles são contidos o tempo médio de execução da cada quantidade de registros(10 à 7500000), assim como seus valores máximos e mínimos. Por fim é gerado um arquivo final com todos os algoritmos, contendo seus tempos de execuções médio em cada quantidade de registro(10 à 7500000).
+**Master.py**|src/models/ExecutionType.py|É uma classe do tipo Enum utilizada no módulo de build.py da aplicação principal. Basicamente contém três tipos de valores que correspondem ao tipo de execução selecionada no módulo principal, os quais são: *MAIN, MAIN_WITHOUT_ARGS* e *RUN_ANALYSIS*.
+**Slave.py**|src/models/Person.py|Classe responsável por representar a entidade Pessoa (Person em inglês). Nesta classe além de conter os atributos voltado ao escopo do trabalho. Também contém o método de comparação entre objetos desta classe chamado *compareTo()*. Basicamente ele compara se o objeto caller, que chama o método, é menor que o objeto passado como argumento, realizando esta comparação pela chave *uid*.
+**handler_master.py**|src/build.py|É o módulo que é buildado e que contém a execução principal do programa. Além da execução principal, *main()*, também há outras formas de execução, onde um deles é voltado para testes internos do desenvolvedor sem utilização de comandos no terminal como é realizado na *main()*, o qual é chamado de *main_without_args()*. Já o outro é voltado para análise de um conjunto de dados de entrada chamado de *run_analysis()*. Ele que é responsável por realizar a chamada do script do módulo *analisys_person.py*.
+**handler_slaves.py**|src/handler_person.py|É um módulo responsável por realizar a manipulação dos dados acerca dos objetos da classe Person. Logo todas as operações que envolvem leitura/escrita de arquivos, transformações dos dados unitários em objetos da classe Person, definições de configurações de execuções através da linha de comando, cálculos, impressões e afins. Ou seja, toda parte de lógica "hard code" está presente neste módulo, onde o *build.py* faz chamada de suas funções.
 
 ### Como executar?
 Para buildar/executar o app no ambiente Linux, onde a linguagem Python geralmente já vem instalado nativamente, basta abrir o CLI(Command Line Interface) no diretório __/src__ e digitar o seguinte comando:
