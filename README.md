@@ -20,7 +20,7 @@ O trabalho consiste na implementação de um simples sistema *DynagentX* com a u
 [*Apache Kafka*](https://kafka.apache.org/intro) é uma plataforma distribuída, logo um sistema distribuído, de mensagens e streaming. Basicamente seu funcionamento é:
 1. O chamado *producer* é responsável por produzir o recurso chamado *message*;
 2. A *mensagem* é armazenada/anexada em uma estrutura chamada *topic*, o qual este agrupa as mensagens;
-3. O chamado *consumer* é reponsável por consumir as mensagens produzidas presentes nos *topics*.
+3. O chamado *consumer* é responsável por consumir as mensagens produzidas presentes nos *topics*.
 
 Logo caso necessite mover e transformar um considerável volume de dados em tempo real entre diferentes sistemas, o *Apache Kafka* pode atender essa demanda.
 
