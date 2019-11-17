@@ -1,5 +1,5 @@
-from master import Master
-from slave import Slave
+from models.Master import Master
+from models.Slave import Slave
 import sys
 
 print("Inicializando o Master!")

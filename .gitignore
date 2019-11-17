@@ -1,0 +1,10 @@
+*.pc
+*.pyc
+*.pyo
+__pycache__/
+.vscode/
+/venv/*
+*/env/*
+.idea
+.sonarlint
+*.editorconfig
