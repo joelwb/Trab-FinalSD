@@ -5,32 +5,46 @@
     about some slave.
 '''
 
+import socket
 from models.Master import Master
+import sys
 
 def main() -> None:
     master: Master = Master()
     master.start()
-    ask_operator(master)
 
-def ask_operator(master: Master) -> None:
+    # create a socket object
+    serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+
+    # bind to the port
+    serversocket.bind(("localhost", 9976))                                  
+
+    # queue up to 5 requests
+    serversocket.listen(5)                                          
+    
     while True:
+        # establish a connection
         try:
-            slave_id: int = int(input("Insert the slave id you would like to know about it: "))
-            slave_status: str = master.request_status(slave_id)
+            clientsocket, addr = serversocket.accept()      
+        except KeyboardInterrupt:
+            break
+
+        slave_id = int(clientsocket.recv(1024).decode())
+
+        try:
+            slave_status = master.request_status(slave_id)
 
             if slave_status == None:
-                print("Slave ID {0} was not found".format(slave_id))
+                clientsocket.send("Slave ID {0} was not found".format(slave_id).encode())
             else:
-                print("Slave ID {0} is currently {1}".format(slave_id, slave_status.upper()))
+                clientsocket.send("Slave ID {0} is currently {1}".format(slave_id, slave_status.upper()).encode())
         except ValueError:
-            print("Error: Invalid value ID. Please insert a valid integer positive number ID.")
-        except Exception:
-            print("Error: Invalid ID. Please insert a valid one")
+            clientsocket.send("Error: Invalid value ID. Please insert a valid integer positive number ID.".encode())
+        except Exception as e:
+            clientsocket.send(str(e).encode())
         finally:
-            print()
-
+            clientsocket.close()
 
 if __name__ == "__main__":
-    import sys
     sys.tracebacklimit = 1
     main()

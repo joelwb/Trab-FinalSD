@@ -21,8 +21,8 @@ def main(args: List[str]) -> None:
         print("Error: You must pass the slave's ID as argument in terminal.")        
     except ValueError:
         print("Error: Cannot instance slave from this type of ID. Please enter a positive integer ID.")
-    except Exception:
-        print("Error: There was an error while creating slave.")
+    except Exception as e:
+        print(e)
     else:
         print()
 

@@ -30,6 +30,7 @@ class Slave(threading.Thread):
         self._status_up_time: datetime = datetime.now()
         self._actual_status: Status = self.__set_status()
         self._consumer = KafkaConsumer(f"get_status_{self.id}", bootstrap_servers=["localhost:9092"])
+        self._reg_consumer = KafkaConsumer(f"reg_response_{self.id}", bootstrap_servers=["localhost:9092"], consumer_timeout_ms=5000)
         self.__make_reg(id)
 
     def __str__(self) -> str:
@@ -46,8 +47,17 @@ class Slave(threading.Thread):
     def __make_reg(self, id: int) -> None:
         producer = KafkaProducer(bootstrap_servers=["localhost:9092"], value_serializer=str.encode)
         producer.send("reg", str(id))
-        #producer.flush()
+        producer.flush()
         producer.close()
+
+        try:
+            response = next(self._reg_consumer).value.decode()
+        except:
+            raise Exception("Master was not found!")
+
+        if response != "OK":
+            raise Exception(response)
+
 
     def __set_status(self) -> Status:
         '''
@@ -78,5 +88,5 @@ class Slave(threading.Thread):
             print(self)
             
             producer.send("status", status)
-            #producer.flush()
+            producer.flush()
             producer.close()
