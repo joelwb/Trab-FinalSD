@@ -12,6 +12,7 @@ import sys
 
 def main() -> None:
     master: Master = Master()
+    master.daemon = True
     master.start()
 
     # create a socket object
