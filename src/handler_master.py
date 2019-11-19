@@ -6,8 +6,9 @@
 '''
 
 import socket
-from models.Master import Master
+from models.master import Master
 import sys
+
 
 def main() -> None:
     master: Master = Master()
@@ -17,7 +18,7 @@ def main() -> None:
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
     # bind to the port
-    serversocket.bind(("localhost", 9976))                                  
+    serversocket.bind(("localhost", 9977))
 
     # queue up to 5 requests
     serversocket.listen(5)                                          
@@ -45,6 +46,8 @@ def main() -> None:
         finally:
             clientsocket.close()
 
+
 if __name__ == "__main__":
     sys.tracebacklimit = 1
     main()
+    sys.exit(0)

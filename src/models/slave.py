@@ -46,8 +46,7 @@ class Slave(threading.Thread):
 
     def __make_reg(self, id: int) -> None:
         producer = KafkaProducer(bootstrap_servers=["localhost:9092"], value_serializer=str.encode)
-        producer.send("reg", str(id))
-        producer.flush()
+        producer.send("reg", str(id)).get(timeout=5)
         producer.close()
 
         try:
@@ -87,6 +86,5 @@ class Slave(threading.Thread):
             print("----The Master is requering my info----")
             print(self)
             
-            producer.send("status", status)
-            producer.flush()
+            producer.send("status", status).get(timeout=5)
             producer.close()

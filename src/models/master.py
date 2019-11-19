@@ -8,13 +8,14 @@ from kafka import KafkaProducer, KafkaConsumer
 from typing import List
 import threading
 
+
 class Master(threading.Thread):
     slaves_ids: List[int] = []
 
     def __init__(self):
         super().__init__()
         self._daemon: bool = True
-        self._status_consumer = KafkaConsumer("status", bootstrap_servers=["localhost:9092"], consumer_timeout_ms=1000)
+        self._status_consumer = KafkaConsumer("status", bootstrap_servers=["localhost:9092"], consumer_timeout_ms=5000)
         self._reg_consumer = KafkaConsumer("reg", bootstrap_servers=["localhost:9092"])
 
     def request_status(self, slave_id: int) -> str:
@@ -23,14 +24,17 @@ class Master(threading.Thread):
         if slave_id not in Master.slaves_ids:
             return None
 
-        producer = KafkaProducer(bootstrap_servers=["localhost:9092"], value_serializer=str.encode)
-        producer.send(f"get_status_{slave_id}", "")
-        producer.flush()
-        producer.close()
+        try:
+            producer = KafkaProducer(bootstrap_servers=["localhost:9092"], value_serializer=str.encode)
+            producer.send(f"get_status_{slave_id}", "").get(timeout=5)
+            producer.close()
+        except Exception:
+            raise Exception("Timeout while trying get status of slave!")
+
 
         try:
             status = next(self._status_consumer)
-        except Exception as e:
+        except Exception:
             Master.slaves_ids.remove(slave_id)
             raise Exception(f"Slave ID {slave_id} is killed!")
         
@@ -43,12 +47,15 @@ class Master(threading.Thread):
             producer = KafkaProducer(bootstrap_servers=["localhost:9092"], value_serializer=str.encode)
             slave_id = int(reg.value.decode())
 
-            
             if slave_id not in self.slaves_ids:
-                producer.send(f"reg_response_{slave_id}","OK")
+                msg = producer.send(f"reg_response_{slave_id}", "OK")
                 self.slaves_ids.append(slave_id)
             else: 
-                producer.send(f"reg_response_{slave_id}", f"Slave ID {slave_id} is already registered!")
+                msg = producer.send(f"reg_response_{slave_id}", f"Slave ID {slave_id} is already registered!")
 
-            producer.flush()
+            try:
+                msg.get(timeout=5)
+            except:
+                pass
+
             producer.close()

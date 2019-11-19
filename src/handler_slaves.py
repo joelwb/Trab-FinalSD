@@ -5,9 +5,10 @@
     (id and name).
 '''
 
-from models.Slave import Slave
+from models.slave import Slave
 from typing import List
 import sys
+
 
 def main(args: List[str]) -> None:
     try:
