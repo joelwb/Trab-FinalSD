@@ -32,9 +32,12 @@ class Slave(threading.Thread):
         self._actual_status: Status = self.__set_status()
         self._consumer = KafkaConsumer(f"get_status_{self.id}", bootstrap_servers=["localhost:9092"])
         self._reg_consumer = KafkaConsumer(f"reg_response_{self.id}", bootstrap_servers=["localhost:9092"], consumer_timeout_ms=5000)
-
-        admin_client = KafkaAdminClient(bootstrap_servers="localhost:9092")
-        admin_client.create_topics([NewTopic(f"reg_response_{self.id}", 1, 1)])
+       
+        try:
+            admin_client = KafkaAdminClient(bootstrap_servers="localhost:9092")
+            admin_client.create_topics([NewTopic(f"reg_response_{self.id}", 1, 1), NewTopic(f"get_status_{self.id}", 1, 1)])
+        except:
+            pass
 
         self.__make_reg(id)
 
