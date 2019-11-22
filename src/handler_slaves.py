@@ -15,9 +15,14 @@ def main(args: List[str]) -> None:
         slave_id: int = int(args[1])
         slave_name: str = args[2] if args.__len__() >= 3 else "Slave {0}".format(slave_id)
         slave: Slave = Slave(slave_id, slave_name)
-        slave.start()
+        slave.daemon = True
         print("------Woke up!------")
         print(slave)
+        
+        slave.start()
+        slave.join()
+    except KeyboardInterrupt:
+        pass
     except IndexError:
         print("Error: You must pass the slave's ID as argument in terminal.")        
     except ValueError:

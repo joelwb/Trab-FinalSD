@@ -5,6 +5,7 @@
 '''
 
 from kafka import KafkaProducer, KafkaConsumer
+from kafka.admin import KafkaAdminClient, NewTopic
 from typing import List
 import threading
 
@@ -17,6 +18,13 @@ class Master(threading.Thread):
         self._daemon: bool = True
         self._status_consumer = KafkaConsumer("status", bootstrap_servers=["localhost:9092"], consumer_timeout_ms=5000)
         self._reg_consumer = KafkaConsumer("reg", bootstrap_servers=["localhost:9092"])
+
+        admin_client = KafkaAdminClient(bootstrap_servers="localhost:9092")
+        try:
+            admin_client.create_topics([NewTopic(f"status", 1, 1), NewTopic(f"reg", 1, 1)])
+        except:
+            pass
+
 
     def request_status(self, slave_id: int) -> str:
         '''Request the current slave status.'''

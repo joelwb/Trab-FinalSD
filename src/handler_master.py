@@ -19,7 +19,7 @@ def main() -> None:
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
     # bind to the port
-    serversocket.bind(("localhost", 9977))
+    serversocket.bind(("localhost", 9998))
 
     # queue up to 5 requests
     serversocket.listen(5)                                          
@@ -29,6 +29,7 @@ def main() -> None:
         try:
             clientsocket, addr = serversocket.accept()      
         except KeyboardInterrupt:
+            serversocket.close()
             break
 
         slave_id = int(clientsocket.recv(1024).decode())
