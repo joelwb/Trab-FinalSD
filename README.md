@@ -43,10 +43,11 @@ Trab-FinalSD
     |_ src
         |_ handler_master.py
         |_ handler_slaves.py
+        |_ operador.py
         |_ simple_main.py
         |_ models
-            |_ Master.py
-            |_ Slave.py
+            |_ master.py
+            |_ slave.py
 ```
 
 #### Descrição geral dos arquivos
@@ -54,8 +55,9 @@ Descrição geral dos principais arquivos contidos nesta aplicação:
 
 Arquivo|Path|Descrição
 ---|---|---
-**Master.py**|src/models/Master.py|É uma classe resposável por agir como o coordenador da aplicação tendo o conhecimento de todos os slaves instanciados na aplicação.
-**Slave.py**|src/models/Slave.py|Classe responsável por representar o coordenado pelo mestre da aplicação. Possui um identificador e um dado status definindo se está em funcionamento ou não, o qual fornece essa informação ao Master, quando este requer.
+**master.py**|src/models/Master.py|É uma classe resposável por agir como o coordenador da aplicação tendo o conhecimento de todos os slaves instanciados na aplicação, e criar um server socket para atender requisições do operador.
+**slave.py**|src/models/Slave.py|Classe responsável por representar o coordenado pelo mestre da aplicação. Possui um identificador e um dado status definindo se está em funcionamento ou não, o qual fornece essa informação ao Master, quando este requer.
+**operador.py**|src/operador.py|Script que inicia um cliente socket que possibilita ao operador solicitar ao Master o status dos slaves conectados a ele.
 **handler_master.py**|src/handler_master.py|É o módulo que é buildado e executa a instancia do objeto da classe Master. Nele há um método responsável por perguntar ao operador (usuário) se deseja saber sobre o funcionamento de um determinado slave da aplicação.
 **handler_slaves.py**|src/handler_slaves.py|É um módulo responsável por realizar inicializar os slaves baseado nas propriedades passado como argumento via terminal no momento de ser buildade, no caso seu ID e nome respectivamente. No momento que o slave é criado é mostrado suas principais informações, assim como o horário de sua instância e quando ele foi requisitado pelo seu mestre.
 
@@ -95,8 +97,19 @@ Para executar a aplicação o app no ambiente Linux basta seguir os seguintes pa
 7. Para cada slave que se deseja criar é nessário abrir um novo terminal, sendo necessário passar como argumento o ID e o nome do slave respectivamente, como é mostrado abaixo. Lembrando que o nome do slave é opcional.
 
         $ python3 handler_slaves.py id_do_slave [nome_do_slave]
-    
+
+8. Por fim deve-se inicializar o cliente do operador.
+        
+        $ python3 operador.py
+  
 __OBS.:__ Importante ressaltar que também pode se criar um ambiente virtual e instalar as dependências definidas no passo 5 e seguir os mesmos passos adiantes.
+
+### O que é preciso para colocar dentro de uma máquina virtual?
+Foi observado que dependendo da quantidade de mensagens produzidas, pode ser ou não necessário mais instâncias de servers Kafka. 
+
+- Se a quantidade de mensagens for muito grande, seria melhor colocar um server principal fora das máquinas virtuais, e um server para cada VM, assim como na arquitetura do artigo. 
+
+- Se não houver muitas mensagens, apenas um server principal já suportaria o tráfego, sendo necessário apenas fazer com que os Slaves dentro da VM se conectem a esse server (trocar o IP/domínio).
 
 ### Informações adicionais
 Todo o código fonte está hospedado no [GitHub](https://github.com/joelwb/Trab-FinalSD).
