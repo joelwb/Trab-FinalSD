@@ -55,9 +55,9 @@ class Master(threading.Thread):
             producer = KafkaProducer(bootstrap_servers=["localhost:9092"], value_serializer=str.encode)
             slave_id = int(reg.value.decode())
 
-            if slave_id not in self.slaves_ids:
+            if slave_id not in Master.slaves_ids:
                 msg = producer.send(f"reg_response_{slave_id}", "OK")
-                self.slaves_ids.append(slave_id)
+                Master.slaves_ids.append(slave_id)
             else: 
                 msg = producer.send(f"reg_response_{slave_id}", f"Slave ID {slave_id} is already registered!")
 
