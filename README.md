@@ -43,7 +43,7 @@ Trab-FinalSD
     |_ src
         |_ handler_master.py
         |_ handler_slaves.py
-        |_ operador.py
+        |_ operator.py
         |_ simple_main.py
         |_ models
             |_ master.py
