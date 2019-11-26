@@ -100,7 +100,7 @@ Para executar a aplicação o app no ambiente Linux basta seguir os seguintes pa
 
 8. Por fim deve-se inicializar o cliente do operador.
         
-        $ python3 operator.py
+        $ python3 operador.py
   
 __OBS.:__ Importante ressaltar que também pode se criar um ambiente virtual e instalar as dependências definidas no passo 5 e seguir os mesmos passos adiantes.
 
