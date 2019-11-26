@@ -43,7 +43,7 @@ Trab-FinalSD
     |_ src
         |_ handler_master.py
         |_ handler_slaves.py
-        |_ operator.py
+        |_ operador.py
         |_ simple_main.py
         |_ models
             |_ master.py
@@ -57,7 +57,7 @@ Arquivo|Path|Descrição
 ---|---|---
 **master.py**|src/models/Master.py|É uma classe resposável por agir como o coordenador da aplicação tendo o conhecimento de todos os slaves instanciados na aplicação, e criar um server socket para atender requisições do operador.
 **slave.py**|src/models/Slave.py|Classe responsável por representar o coordenado pelo mestre da aplicação. Possui um identificador e um dado status definindo se está em funcionamento ou não, o qual fornece essa informação ao Master, quando este requer.
-**operator.py**|src/operador.py|Script que inicia um cliente socket que possibilita ao operador solicitar ao Master o status dos slaves conectados a ele.
+**operador.py**|src/operador.py|Script que inicia um cliente socket que possibilita ao operador solicitar ao Master o status dos slaves conectados a ele.
 **handler_master.py**|src/handler_master.py|É o módulo que é buildado e executa a instancia do objeto da classe Master. Nele há um método responsável por perguntar ao operador (usuário) se deseja saber sobre o funcionamento de um determinado slave da aplicação.
 **handler_slaves.py**|src/handler_slaves.py|É um módulo responsável por realizar inicializar os slaves baseado nas propriedades passado como argumento via terminal no momento de ser buildade, no caso seu ID e nome respectivamente. No momento que o slave é criado é mostrado suas principais informações, assim como o horário de sua instância e quando ele foi requisitado pelo seu mestre.
 
