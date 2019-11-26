@@ -13,7 +13,7 @@ while True:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
     # connection to hostname on the port.
-    s.connect(("localhost", 9998))
+    s.connect(("localhost", 9999))
 
     s.send(str(slave_id).encode())
     print(s.recv(1024).decode())

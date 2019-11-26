@@ -74,7 +74,7 @@ class Slave(threading.Thread):
             * 12:00:00 to 17:59:59 - Working;
             * 18:00:00 to 23:59:59 - Not Working;
         '''
-        current_datetime: datetime = datetime.now() #+ timedelta(hours=random.randint(0, 24))
+        current_datetime: datetime = datetime.now() + timedelta(hours=random.randint(0, 24))
         self._status_up_time = current_datetime
 
         if ((current_datetime.hour >= 0 and current_datetime.hour < 6) or 
